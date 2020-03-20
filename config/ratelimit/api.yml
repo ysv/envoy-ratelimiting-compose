@@ -1,13 +1,13 @@
 ---
 domain: api
 descriptors:
-- key: header_match
-  value: quote-path-auth
-  rate_limit:
-    unit: minute
-    requests_per_unit: 10
-
 - key: remote_address
   rate_limit:
     unit: minute
     requests_per_unit: 15
+
+- key: remote_address
+  value: 127.0.0.1
+  rate_limit:
+    unit: minute
+    requests_per_unit: 50

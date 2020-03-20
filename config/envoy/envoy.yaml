@@ -27,29 +27,9 @@ static_resources:
                 route:
                   cluster: service2
               rate_limits:
-              #              - actions:
-              #                - header_value_match:
-              #                    descriptor_value: quote-path-auth
-              #                    expect_match: false
-              #                    headers:
-              #                    - name: "Authorization"
-              #                stage: 0
               - actions:
                 - remote_address: {}
           http_filters:
-          #          - name: envoy.rate_limit
-          #              config:
-          #                domain: apis
-          #                stage: 1
-          #                request_type: external
-          #                failure_mode_deny: true
-          #                rate_limit_service:
-          #                  grpc_service:
-          #                    envoy_grpc:
-          #                      cluster_name: ratelimit
-
-          #         Config example:  https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/filter/http/rate_limit/v2/rate_limit.proto#config-filter-http-rate-limit-v2-ratelimit
-          #         Working example: https://github.com/salrashid123/envoy_ratelimit
           - name: envoy.rate_limit
             config:
               domain: api
