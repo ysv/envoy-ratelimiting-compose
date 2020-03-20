@@ -1,0 +1,6 @@
+# TODO: Try non dev version.
+FROM envoyproxy/envoy-dev:latest
+
+RUN apt-get update && apt-get -q install -y \
+    curl
+CMD /usr/local/bin/envoy -c /etc/envoy/config/envoy.yaml --service-cluster proxy
