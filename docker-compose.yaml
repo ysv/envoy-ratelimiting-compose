@@ -1,0 +1,82 @@
+version: "3.7"
+
+services:
+  front-envoy:
+    build:
+      context: .
+      dockerfile: Dockerfile-frontenvoy
+    volumes:
+      - ./front-envoy.yaml:/etc/front-envoy.yaml
+    networks:
+      - envoymesh
+    depends_on:
+      - ratelimit
+    expose:
+      - "80"
+      - "8001"
+    ports:
+      - "8000:80"
+      - "8001:8001"
+
+  redis:
+    image: redis:alpine
+    expose:
+    - 6379
+    ports:
+    - 6379:6379
+    networks:
+    - envoymesh
+
+  ratelimit:
+    image: envoyproxy/ratelimit:v1.4.0
+    command: "/bin/ratelimit"
+    ports:
+    - 8080:8080
+    - 8081:8081
+    - 6070:6070
+    depends_on:
+    - redis
+    networks:
+    - envoymesh
+    volumes:
+      - ./config/ratelimit:/data/ratelimit/config
+    environment:
+    - USE_STATSD=false
+    - LOG_LEVEL=debug
+    - REDIS_SOCKET_TYPE=tcp
+    - REDIS_URL=redis:6379
+    - RUNTIME_ROOT=/data
+    - RUNTIME_SUBDIRECTORY=ratelimit
+
+  service1:
+    build:
+      context: .
+      dockerfile: Dockerfile-service
+    volumes:
+      - ./service-envoy.yaml:/etc/service-envoy.yaml
+    networks:
+      envoymesh:
+        aliases:
+          - service1
+    environment:
+      - SERVICE_NAME=1
+    expose:
+      - "80"
+
+  service2:
+    build:
+      context: .
+      dockerfile: Dockerfile-service
+    volumes:
+      - ./service-envoy.yaml:/etc/service-envoy.yaml
+    networks:
+      envoymesh:
+        aliases:
+          - service2
+    environment:
+      - SERVICE_NAME=2
+    expose:
+      - "80"
+
+networks:
+  envoymesh: {}
