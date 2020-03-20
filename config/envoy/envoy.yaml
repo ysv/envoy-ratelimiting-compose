@@ -52,7 +52,7 @@ static_resources:
           #         Working example: https://github.com/salrashid123/envoy_ratelimit
           - name: envoy.rate_limit
             config:
-              domain: ysv
+              domain: api
               stage: 0
               request_type: external
               failure_mode_deny: true

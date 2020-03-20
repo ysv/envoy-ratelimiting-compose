@@ -1,5 +1,5 @@
 ---
-domain: ysv
+domain: api
 descriptors:
 - key: header_match
   value: quote-path-auth
