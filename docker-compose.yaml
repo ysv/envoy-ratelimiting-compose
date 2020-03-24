@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-envoy
+    command: "/usr/local/bin/envoy -c /etc/envoy/config/envoy.yaml --service-cluster proxy -l debug"
     volumes:
       - ./config/envoy:/etc/envoy/config
     networks:

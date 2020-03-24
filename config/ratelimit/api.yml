@@ -1,13 +1,23 @@
 ---
 domain: api
-descriptors:
-- key: remote_address
-  rate_limit:
-    unit: minute
-    requests_per_unit: 15
 
-- key: remote_address
-  value: 127.0.0.1
+descriptors:
+- key: header_match
+  value: quote-path-auth
   rate_limit:
     unit: minute
-    requests_per_unit: 50
+    requests_per_unit: 1
+
+- key: header_match
+  value: cf-ip-missing
+  rate_limit:
+    unit: second
+    requests_per_unit: 0
+
+- key: header_match
+  value: ip_whitelisted
+
+- key: ip_address
+  rate_limit:
+    unit: minute
+    requests_per_unit: 10
