@@ -3,21 +3,27 @@ domain: api
 
 descriptors:
 - key: header_match
-  value: quote-path-auth
-  rate_limit:
-    unit: minute
-    requests_per_unit: 1
-
-- key: header_match
   value: cf-ip-missing
   rate_limit:
     unit: second
     requests_per_unit: 0
 
-- key: header_match
-  value: ip_whitelisted
-
-- key: ip_address
+# Blacklisted IP Address.
+- key: cf-ip-address
+  value: "0.0.0.0"
   rate_limit:
     unit: minute
-    requests_per_unit: 10
+    requests_per_unit: 0
+
+# Whitelisted IP Address.
+- key: cf-ip-address
+  value: "163.172.165.12"
+  rate_limit:
+    unit: minute
+    requests_per_unit: 5
+
+# Common IP Address.
+- key: cf-ip-address
+  rate_limit:
+    unit: minute
+    requests_per_unit: 2

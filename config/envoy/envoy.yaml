@@ -34,13 +34,35 @@ static_resources:
                 route:
                   cluster: service2
               rate_limits:
-              - actions:
+              - stage: 0
+                actions:
+                # https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/route/route_components.proto#route-ratelimit-action-headervaluematch
                 - header_value_match:
                     descriptor_value: cf-ip-missing
                     expect_match: false
                     headers:
-                    - name: "Authorization"
-                stage: 0
+                    - name: "CF-Connecting-IP"
+                      present_match: true
+
+              - stage: 0
+                actions:
+                # https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/route/route_components.proto#route-ratelimit-action-requestheaders
+                - request_headers:
+                    header_name: "CF-Connecting-IP"
+                    descriptor_key: cf-ip-address
+
+#                - header_value_match:
+#                    descriptor_value: cf-ip-whitelisted
+#                    expect_match: true
+#                    headers:
+#                    - name: "CF-Connecting-IP"
+#                      exact_match: "163.172.165.12"
+#
+#                # https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/route/route_components.proto#route-ratelimit-action-requestheaders
+#                - request_headers:
+#                    header_name: "CF-Connecting-IP"
+#                    descriptor_key: ip-address
+#                stage: 0
 #              rate_limits:
 #              - actions:
 #                - header_value_match:
@@ -50,7 +72,6 @@ static_resources:
 #                      - name: "cf-connecting-ip"
 #                        present_match: true
 #
-#                # https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/route/route_components.proto#route-ratelimit-action-headervaluematch
 #                - header_value_match:
 #                    descriptor_value: ip_whitelisted
 #                    expect_match: true
