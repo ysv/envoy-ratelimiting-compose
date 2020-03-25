@@ -2,15 +2,16 @@
 domain: api
 
 descriptors:
+# Limit requests in case of missing CF-Connecting-IP.
 - key: header_match
   value: cf-ip-missing
   rate_limit:
-    unit: second
+    unit: minute
     requests_per_unit: 0
 
 # Blacklisted IP Address.
 - key: cf-ip-address
-  value: "0.0.0.0"
+  value: "45.128.133.242"
   rate_limit:
     unit: minute
     requests_per_unit: 0
@@ -20,10 +21,22 @@ descriptors:
   value: "163.172.165.12"
   rate_limit:
     unit: minute
-    requests_per_unit: 5
+    requests_per_unit: 10
+  descriptors:
+  - key: header_match
+    value: sensetive-path
+    rate_limit:
+      unit: minute
+      requests_per_unit: 5
 
 # Common IP Address.
 - key: cf-ip-address
   rate_limit:
     unit: minute
-    requests_per_unit: 2
+    requests_per_unit: 5
+  descriptors:
+  - key: header_match
+    value: sensetive-path
+    rate_limit:
+      unit: minute
+      requests_per_unit: 2

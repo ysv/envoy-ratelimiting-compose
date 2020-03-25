@@ -51,6 +51,27 @@ static_resources:
                     header_name: "CF-Connecting-IP"
                     descriptor_key: cf-ip-address
 
+              - stage: 0
+                actions:
+                # https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/route/route_components.proto#route-ratelimit-action-requestheaders
+                - request_headers:
+                    header_name: "CF-Connecting-IP"
+                    descriptor_key: cf-ip-address
+                # https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/route/route_components.proto#route-ratelimit-action-requestheaders
+                - header_value_match:
+                    descriptor_value: sensetive-path
+                    expect_match: true
+                    headers:
+                    - name: ":path"
+                      exact_match: "/service/2"
+
+#              - stage: 0
+#                  actions:
+#                  # https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/route/route_components.proto#route-ratelimit-action-requestheaders
+#                  - request_headers:
+#                      header_name: "CF-Connecting-IP"
+#                      descriptor_key: cf-ip-address
+
 #                - header_value_match:
 #                    descriptor_value: cf-ip-whitelisted
 #                    expect_match: true
